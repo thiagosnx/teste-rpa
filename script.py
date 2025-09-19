@@ -7,7 +7,7 @@ from pathlib import Path
 import time
 import csv
 import os
-import pandas as pd
+# import pandas as pd
 import shutil
 
 def get_filmes():
@@ -80,12 +80,12 @@ def get_filmes():
 
         
         resultados = {
-            "titulo": titulo,
-            "ano": ano,
-            "duracao": duracao,
-            "nota": nota,
-            "classificacao": classificacao,
-            "sinopse": sinopse
+            "TITULO": titulo,
+            "ANO": ano,
+            "DURACAO": duracao,
+            "NOTA": nota,
+            "CLASSIFICACAO": classificacao,
+            "SINOPSE": sinopse
         }
 
         with open(file, mode='a', newline='', encoding='utf-8-sig') as csvfile:
