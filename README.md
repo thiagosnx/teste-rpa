@@ -11,7 +11,7 @@ Este projeto é um script em Python que usa **Selenium WebDriver** para acessar 
 
 ## Estrutura básica
 
-* `script.py` — arquivo com o script (substitua pelo nome do seu arquivo, se for diferente)
+* `script.py` — arquivo com o script
 * `requirements.txt` — arquivo com dependências
 * `uploads/` — pasta onde o CSV final será movido
 
