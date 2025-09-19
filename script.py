@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from pathlib import Path
 import time
+import csv
+import os
 import pandas as pd
 import shutil
 
@@ -20,7 +22,7 @@ def get_filmes():
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 
-    inico_btn = WebDriverWait(driver, 5).until(
+    inico_btn = WebDriverWait(driver, 10).until(
                 ec.visibility_of_element_located((By.CLASS_NAME, "ipc-scroll-to-top-button.sc-3e53ab1c-0.dOykdw.visible.ipc-chip.ipc-chip--on-base"))
             )
 
@@ -32,6 +34,10 @@ def get_filmes():
 
 
     resultados = []
+
+    file = "filmes_imdb.csv"
+    write_header = not os.path.exists(file)
+
 
     actions = ActionChains(driver)
 
@@ -46,7 +52,7 @@ def get_filmes():
 
         sinopse_btn.click()
 
-        sinopse = WebDriverWait(driver, 5).until(
+        sinopse = WebDriverWait(driver, 10).until(
                 ec.visibility_of_element_located((By.CLASS_NAME, "sc-717a9add-2.jPYKsd"))
             )
         sinopse = sinopse.text
@@ -72,24 +78,33 @@ def get_filmes():
         classificacao = spans[2].text if len(spans) > 2 else 'N/I'
 
 
-        resultados.append({
+        
+        resultados = {
             "titulo": titulo,
             "ano": ano,
             "duracao": duracao,
             "nota": nota,
             "classificacao": classificacao,
             "sinopse": sinopse
-        })
+        }
+
+        with open(file, mode='a', newline='', encoding='utf-8-sig') as csvfile:
+
+            writer = csv.DictWriter(csvfile, fieldnames=resultados.keys(), delimiter=';')
+            if write_header:
+                writer.writeheader()
+                write_header = False
+            writer.writerow(resultados)
+        
         
     driver.quit()
 
-    df = pd.DataFrame(resultados)
+    # df = pd.DataFrame(resultados)
 
-    df.columns = df.columns.str.upper()
+    # df.columns = df.columns.str.upper()
 
-    file = "filmes_imdb.csv"
 
-    df.to_csv(file, index=False, encoding='utf-8-sig', sep=';')
+    # df.to_csv(file, index=False, encoding='utf-8-sig', sep=';')
     move_file(file, "uploads")
 
 def move_file(file, path):
