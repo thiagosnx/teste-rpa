@@ -36,7 +36,7 @@ def get_filmes():
     actions = ActionChains(driver)
 
 
-    for f in filmes:
+    for f in filmes[:5]:
 
         sinopse_btn = f.find_element(By.CLASS_NAME, "ipc-icon-button.li-info-icon.ipc-icon-button--base.ipc-icon-button--onAccent2")
 
@@ -55,7 +55,7 @@ def get_filmes():
         fecha_sinopse_btn.click()
 
         time.sleep(0.5)
-        
+
         WebDriverWait(driver, 20).until(
             ec.invisibility_of_element_located((By.CLASS_NAME, "sc-717a9add-2.jPYKsd"))
         )
@@ -80,6 +80,8 @@ def get_filmes():
             "classificacao": classificacao,
             "sinopse": sinopse
         })
+        
+    driver.quit()
 
     df = pd.DataFrame(resultados)
 
@@ -88,9 +90,6 @@ def get_filmes():
     file = "filmes_imdb.csv"
 
     df.to_csv(file, index=False, encoding='utf-8-sig', sep=';')
-
-    driver.quit()
-
     move_file(file, "uploads")
 
 def move_file(file, path):
