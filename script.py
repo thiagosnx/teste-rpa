@@ -1,8 +1,8 @@
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from dotenv import load_dotenv
 import time
 
 
@@ -32,10 +32,17 @@ filmes = driver.find_elements(By.CLASS_NAME, "ipc-metadata-list-summary-item")
 
 resultados = []
 
+actions = ActionChains(driver)
 
-for f in filmes:
+
+for f in filmes[:10]:
 
     sinopse_btn = f.find_element(By.CLASS_NAME, "ipc-icon-button.li-info-icon.ipc-icon-button--base.ipc-icon-button--onAccent2")
+
+    actions.move_to_element(sinopse_btn).perform()
+
+    WebDriverWait(driver, 10).until(ec.element_to_be_clickable(sinopse_btn))
+
     sinopse_btn.click()
 
     sinopse = WebDriverWait(driver, 5).until(
@@ -46,6 +53,9 @@ for f in filmes:
     fecha_sinopse_btn = driver.find_element(By.CLASS_NAME, "ipc-promptable-base__close") 
     fecha_sinopse_btn.click()
 
+    WebDriverWait(driver, 10).until(
+        ec.invisibility_of_element_located((By.CLASS_NAME, "sc-717a9add-2.jPYKsd"))
+    )
 
 
     titulo = f.find_element(By.CLASS_NAME, "ipc-title__text.ipc-title__text--reduced").text
