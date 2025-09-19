@@ -42,7 +42,7 @@ def get_filmes():
     actions = ActionChains(driver)
 
 
-    for f in filmes[:5]:
+    for f in filmes:
 
         sinopse_btn = f.find_element(By.CLASS_NAME, "ipc-icon-button.li-info-icon.ipc-icon-button--base.ipc-icon-button--onAccent2")
 
@@ -57,10 +57,11 @@ def get_filmes():
             )
         sinopse = sinopse.text
 
+
         fecha_sinopse_btn = driver.find_element(By.CLASS_NAME, "ipc-promptable-base__close") 
+        WebDriverWait(driver, 10).until(ec.element_to_be_clickable(fecha_sinopse_btn))
         fecha_sinopse_btn.click()
 
-        time.sleep(0.5)
 
         WebDriverWait(driver, 20).until(
             ec.invisibility_of_element_located((By.CLASS_NAME, "sc-717a9add-2.jPYKsd"))
